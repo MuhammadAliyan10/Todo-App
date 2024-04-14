@@ -1,0 +1,27 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+b {
+  font-family: "Geologica", sans-serif;
+}
+
+p,
+a,
+label {
+  font-family: "Open Sans", sans-serif;
+  text-decoration: none !important;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #FAFAFA;
+}
+
+.container {
+  padding-left: 13rem;
+}
