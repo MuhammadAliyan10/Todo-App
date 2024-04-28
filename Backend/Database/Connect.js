@@ -1,10 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const dbURI = 'mongodb://localhost:27017/taskApp';
-
-
-const options = {
-    useUnifiedTopology: true,
-};
-
-mongoose.connect(dbURI, options).then(() => console.log("Connection Successfully")).catch((err) => console.log(err))
+mongoose
+  .connect("mongodb://localhost/todo_app")
+  .then(() => console.log("Connection to database is successful"))
+  .catch((err) => {
+    console.log(err);
+  });

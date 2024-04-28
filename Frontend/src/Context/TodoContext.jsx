@@ -8,23 +8,17 @@ export const useTodoContext = () => {
 
 const TodoProvider = ({ children }) => {
   const [userList, setUserList] = useState([]);
-  const [isLogIn, setIsLogIn] = useState(
-    localStorage.getItem("isLogIn") === "true"
-  );
-  const [userInfo, setUserInfo] = useState({
-    username: "",
-    email: "",
-  });
+  const [isLogIn, setIsLogIn] = useState(false);
+
   useEffect(() => {
-    localStorage.setItem("isLogIn", isLogIn);
+    const token = localStorage.getItem("token");
+    setIsLogIn(token !== null);
   }, [isLogIn]);
 
   const todoContextValue = {
     userList,
     isLogIn,
     setIsLogIn,
-    userInfo,
-    setUserInfo,
   };
   return (
     <TodoContext.Provider value={todoContextValue}>

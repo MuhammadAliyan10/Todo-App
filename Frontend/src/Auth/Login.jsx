@@ -21,8 +21,9 @@ const Login = () => {
         },
         body: JSON.stringify(data),
       });
-      if (response.ok) {
-        localStorage.setItem("user_info", JSON.stringify(data));
+      const res = await response.json();
+      if (res.status == 200) {
+        localStorage.setItem("token", res.token);
         setIsLogIn(true);
       }
     } catch (err) {

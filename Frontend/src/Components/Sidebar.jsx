@@ -7,7 +7,7 @@ const Sidebar = () => {
   const { userList, setIsLogIn } = useTodoContext();
   const navigate = useNavigate();
   const handleSignOut = () => {
-    localStorage.removeItem("user_info");
+    localStorage.removeItem("token");
     setIsLogIn(false);
     navigate("/login");
   };

@@ -11,18 +11,14 @@ const TodoToday = () => {
     const getTodayTodo = async () => {
       try {
         const api = "http://localhost:3000/tasks/todayTodo";
-        const resData = await fetch(api, {
-          method: "POST",
+        const token = localStorage.getItem("token");
+        const data = await fetch(api, {
           headers: {
-            "Content-type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
-          body: localStorage.getItem("user_info"),
         });
-        if (!resData.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const res = await resData.json();
-        setTodoToday(res);
+        const todo = await data.json();
+        setTodoToday(todo);
         isTodoAdded(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -30,9 +26,6 @@ const TodoToday = () => {
     };
     getTodayTodo();
   }, [todoAdded]);
-  const local = localStorage.getItem("user_info");
-  const localPars = JSON.parse(local);
-  const email = localPars.email;
   const [data, setData] = useState({
     title: "",
     list: {
@@ -42,38 +35,8 @@ const TodoToday = () => {
     type: {
       value: "",
     },
-    user: email,
   });
 
-  const addTodo = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/tasks/addTodo", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to add todo");
-      }
-      setShowBox(false);
-      isTodoAdded(true);
-      setData({
-        title: "",
-        list: {
-          value: "",
-        },
-
-        type: {
-          value: "",
-        },
-      });
-    } catch (error) {
-      console.error("Error adding todo:", error);
-    }
-  };
   const onInputChange = (e) => {
     const { name, value } = e.target;
     if (name.startsWith("list")) {
@@ -104,9 +67,14 @@ const TodoToday = () => {
   const handleDelete = async (id) => {
     setLoading(true);
     const api = `http://localhost:3000/tasks/removeTodo/${id}`;
+    const token = localStorage.getItem("token");
+
     try {
       const response = await fetch(api, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error("Failed to delete todo");
@@ -121,8 +89,35 @@ const TodoToday = () => {
 
   const [showBox, setShowBox] = useState(false);
 
-  const handleAddTodo = () => {
-    addTodo();
+  const handleAddTodo = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:3000/tasks/addTodo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to add todo");
+      }
+      setShowBox(false);
+      isTodoAdded(true);
+      setData({
+        title: "",
+        list: {
+          value: "",
+        },
+
+        type: {
+          value: "",
+        },
+      });
+    } catch (error) {
+      console.error("Error adding todo:", error);
+    }
   };
   const handleTaskCompleted = (taskID) => {
     setTodoToday((prevTodo) =>
