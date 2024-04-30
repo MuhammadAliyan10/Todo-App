@@ -3,10 +3,26 @@ import "../assets/Css/Todo.css";
 import { useTodoContext } from "../Context/TodoContext";
 import "../assets/Css/PopUpBox.css";
 const TodoToday = () => {
-  const [todoToday, setTodoToday] = useState([]);
+  const { allList, setAllLists, todoToday, setTodoToday } = useTodoContext();
   const [todoAdded, isTodoAdded] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showBox, setShowBox] = useState(false);
+  const [isTaskCompleted, setIsTaskCompleted] = useState(false);
 
+  useEffect(() => {
+    const getAllList = async () => {
+      const api = "http://localhost:3000/tasks/getLists";
+      const token = localStorage.getItem("token");
+      const data = await fetch(api, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const res = await data.json();
+      setAllLists(res);
+    };
+    getAllList();
+  }, [allList]);
   useEffect(() => {
     const getTodayTodo = async () => {
       try {
@@ -35,6 +51,8 @@ const TodoToday = () => {
     type: {
       value: "",
     },
+    timeStamps: "",
+    isCompleted: isTaskCompleted,
   });
 
   const onInputChange = (e) => {
@@ -86,9 +104,6 @@ const TodoToday = () => {
       setLoading(false);
     }
   };
-
-  const [showBox, setShowBox] = useState(false);
-
   const handleAddTodo = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -114,6 +129,7 @@ const TodoToday = () => {
         type: {
           value: "",
         },
+        timeStamps: "",
       });
     } catch (error) {
       console.error("Error adding todo:", error);
@@ -125,6 +141,7 @@ const TodoToday = () => {
         if (todoItem._id === taskID) {
           return { ...todoItem, isCompleted: !todoItem.isCompleted };
         }
+        setIsTaskCompleted(true);
         return todoItem;
       })
     );
@@ -149,13 +166,27 @@ const TodoToday = () => {
                     placeholder="Enter the title..."
                     onChange={(e) => onInputChange(e)}
                   />
-                  <input
-                    type="text"
-                    placeholder="Add your list..."
-                    onChange={(e) => onInputChange(e)}
+                  <select
+                    id="mySelect"
                     value={data.list.value}
+                    onChange={(e) => onInputChange(e)}
                     name="list_value"
-                  />
+                  >
+                    {allList.length > 0 ? (
+                      <>
+                        {allList.map((list) => {
+                          return (
+                            <>
+                              <option hidden>Select the list...</option>
+                              <option value={list.title}>{list.title}</option>
+                            </>
+                          );
+                        })}
+                      </>
+                    ) : (
+                      <option hidden>No list found</option>
+                    )}
+                  </select>
                   <select
                     id="mySelect"
                     value={data.type.value}
@@ -166,6 +197,24 @@ const TodoToday = () => {
                     <option value="Todo">Todo</option>
                     <option value="Reminder">Reminder</option>
                     <option value="Desire">Desire</option>
+                  </select>
+
+                  <select
+                    id="mySelect"
+                    value={data.timeStamps}
+                    onChange={(e) => onInputChange(e)}
+                    name="timeStamps"
+                  >
+                    <option hidden>Enter the time...</option>
+                    <option value="Today" defaultChecked>
+                      Today
+                    </option>
+                    <option value="Tomorrow" disabled>
+                      Tomorrow
+                    </option>
+                    <option value="nextWeek" disabled>
+                      Next Week
+                    </option>
                   </select>
                   <div className="box__buttons">
                     <button onClick={handleAddTodo}>Add</button>

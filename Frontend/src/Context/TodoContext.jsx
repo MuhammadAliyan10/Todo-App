@@ -7,7 +7,10 @@ export const useTodoContext = () => {
 };
 
 const TodoProvider = ({ children }) => {
-  const [userList, setUserList] = useState([]);
+  const [allList, setAllLists] = useState([]);
+  const [todoToday, setTodoToday] = useState([]);
+  const [todoTomorrow, setTodoTomorrow] = useState([]);
+  const [todoNextWeek, setTodoNextWeek] = useState([]);
   const [isLogIn, setIsLogIn] = useState(false);
 
   useEffect(() => {
@@ -16,7 +19,14 @@ const TodoProvider = ({ children }) => {
   }, [isLogIn]);
 
   const todoContextValue = {
-    userList,
+    todoNextWeek,
+    setTodoNextWeek,
+    todoTomorrow,
+    setTodoTomorrow,
+    todoToday,
+    setTodoToday,
+    allList,
+    setAllLists,
     isLogIn,
     setIsLogIn,
   };

@@ -3,7 +3,7 @@ import "../assets/Css/Auth.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useTodoContext } from "../Context/TodoContext";
 const Signup = () => {
-  const { setIsLogIn, setUserInfo } = useTodoContext();
+  const { setIsLogIn } = useTodoContext();
   const [data, setData] = useState({ username: "", email: "", password: "" });
   const navigate = useNavigate();
 
@@ -24,8 +24,6 @@ const Signup = () => {
       console.log("Error while adding user");
     }
     setIsLogIn(true);
-    localStorage.setItem("user_info", JSON.stringify(data.email));
-    setUserInfo({ username: data.username, email: data.email });
   };
   return (
     <div>
