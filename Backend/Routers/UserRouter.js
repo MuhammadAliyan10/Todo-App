@@ -15,7 +15,7 @@ router.get("/getUser", Auth, async (req, res) => {
     res.json({ username: user.username, email: user.email });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal server error");
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -36,7 +36,7 @@ router.post("/signup", async (req, res) => {
     res.status(200).json({ message: "New user added successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal server error");
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -57,7 +57,7 @@ router.post("/login", async (req, res) => {
     res.status(200).json({ status: 200, token: token });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

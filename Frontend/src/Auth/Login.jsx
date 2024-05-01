@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "../assets/Css/Auth.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useTodoContext } from "../Context/TodoContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Login = () => {
   const navigate = useNavigate();
   const { setIsLogIn } = useTodoContext();
@@ -11,7 +13,7 @@ const Login = () => {
   };
   const handleSubmit = async (e) => {
     if (!data) {
-      return;
+      return toast("Please enter your email or password.");
     }
     e.preventDefault();
     try {
@@ -23,11 +25,12 @@ const Login = () => {
         body: JSON.stringify(data),
       });
       const res = await response.json();
-
       if (res.status == 200) {
         localStorage.setItem("token", res.token);
         setIsLogIn(true);
         navigate("/");
+      } else {
+        return toast(res.message);
       }
     } catch (err) {
       console.log(err);
@@ -35,6 +38,7 @@ const Login = () => {
   };
   return (
     <div>
+      <ToastContainer />
       <div className="auth">
         <div className="auth__box">
           <form onSubmit={handleSubmit}>

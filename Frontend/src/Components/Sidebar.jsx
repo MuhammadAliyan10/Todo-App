@@ -3,6 +3,8 @@ import "../assets/Css/Sidebar.css";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useTodoContext } from "../Context/TodoContext";
 import "../assets/Css/PopUpBox.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
@@ -26,6 +28,9 @@ const Sidebar = () => {
         },
       });
       const res = await data.json();
+      if (!data.ok) {
+        return toast(res.message);
+      }
       setAllLists(res);
     };
     getAllList();
@@ -43,6 +48,10 @@ const Sidebar = () => {
       });
       setListChanged(true);
       const res = await data.json();
+      if (!data.ok) {
+        return toast(res.message);
+      }
+      toast(res.message);
     } catch (error) {
       console.log(error);
     }
@@ -50,6 +59,11 @@ const Sidebar = () => {
   const handleListAdd = async () => {
     const api = "http://localhost:3000/tasks/addList";
     const token = localStorage.getItem("token");
+    if (!list.title) {
+      return toast("Title is required");
+    } else if (!list.color) {
+      return toast("Color is required");
+    }
     try {
       const data = await fetch(api, {
         method: "POST",
@@ -59,11 +73,14 @@ const Sidebar = () => {
         },
         body: JSON.stringify(list),
       });
-      console.log(list);
+
       setListChanged(true);
       setShowBox(false);
       const res = await data.json();
-      console.log(res);
+      if (!data.ok) {
+        return toast(res.message);
+      }
+      toast(res.message);
     } catch (error) {
       console.error(error);
     }
@@ -73,6 +90,7 @@ const Sidebar = () => {
   };
   return (
     <div>
+      <ToastContainer />
       <div className="sidebar">
         <h4 className="sidebar__header">Tasks</h4>
 

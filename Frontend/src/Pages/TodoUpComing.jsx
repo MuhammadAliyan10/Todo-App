@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "../assets/Css/Todo.css";
 import { useTodoContext } from "../Context/TodoContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const TodoUpComing = () => {
   const {
     todoNextWeek,
     setTodoNextWeek,
     allList,
-    setAllLists,
     todoToday,
     setTodoToday,
     todoTomorrow,
@@ -28,6 +29,9 @@ const TodoUpComing = () => {
           },
         });
         const todo = await data.json();
+        if (!data.ok) {
+          return toast(todo.message);
+        }
         setTodoToday(todo);
         isTodoAdded(false);
       } catch (error) {
@@ -44,6 +48,9 @@ const TodoUpComing = () => {
           },
         });
         const todo = await data.json();
+        if (!data.ok) {
+          return toast(todo.message);
+        }
         setTodoTomorrow(todo);
         isTodoAdded(false);
       } catch (error) {
@@ -60,6 +67,9 @@ const TodoUpComing = () => {
           },
         });
         const todo = await data.json();
+        if (!data.ok) {
+          return toast(todo.message);
+        }
         setTodoNextWeek(todo);
         isTodoAdded(false);
       } catch (error) {
@@ -103,7 +113,6 @@ const TodoUpComing = () => {
     setLoading(true);
     const api = `http://localhost:3000/tasks/removeTodo/${id}`;
     const token = localStorage.getItem("token");
-
     try {
       const response = await fetch(api, {
         method: "DELETE",
@@ -111,8 +120,9 @@ const TodoUpComing = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      const data = await response.json();
       if (!response.ok) {
-        throw new Error("Failed to delete todo");
+        return toast(data.message);
       }
       isTodoAdded(true);
     } catch (error) {
@@ -139,6 +149,16 @@ const TodoUpComing = () => {
     });
   };
   const handleAddTodo = async () => {
+    if (!data) {
+      return toast("All the fields are required.");
+    } else if (!data.title) {
+      return toast("Title is required.");
+    } else if (!data.type) {
+      return toast("Type is required.");
+    } else if (!data.list.title) {
+      return toast("List title is required.");
+    }
+
     try {
       const token = localStorage.getItem("token");
       const response = await fetch("http://localhost:3000/tasks/addTodo", {
@@ -149,9 +169,11 @@ const TodoUpComing = () => {
         },
         body: JSON.stringify(data),
       });
+      const resData = await response.json();
       if (!response.ok) {
-        throw new Error("Failed to add todo");
+        return toast(resData.message);
       }
+      toast(resData.message);
       setShowBox(false);
       isTodoAdded(true);
       setData({
@@ -174,7 +196,6 @@ const TodoUpComing = () => {
   const updatedIsCompleted = async (taskID, currentStatus) => {
     const api = `http://localhost:3000/tasks/updateCompleted/${taskID}`;
     const token = localStorage.getItem("token");
-
     try {
       const res = await fetch(api, {
         method: "PATCH",
@@ -185,8 +206,9 @@ const TodoUpComing = () => {
         body: JSON.stringify({ isCompleted: !currentStatus }),
       });
 
+      const data = await res.json();
       if (res.ok) {
-        const data = await res.json();
+        isTodoAdded(!todoAdded);
         setTodoToday((prevTodo) =>
           prevTodo.map((todoItem) => {
             if (todoItem._id === taskID) {
@@ -195,9 +217,6 @@ const TodoUpComing = () => {
             return todoItem;
           })
         );
-        console.log(data);
-      } else {
-        throw new Error("Failed to update todo");
       }
     } catch (error) {
       console.error("Error updating todo:", error);
@@ -206,6 +225,7 @@ const TodoUpComing = () => {
 
   return (
     <div className="todo my-5">
+      <ToastContainer />
       <div className="container">
         <div className="today__task">
           <h3>Today</h3>
@@ -273,24 +293,22 @@ const TodoUpComing = () => {
                     onChange={(e) => onInputChange(e)}
                     name="timeStamps"
                   >
+                    <option hidden>Enter the time.</option>
                     <option
                       value="Today"
                       disabled={time == "Tomorrow" || time == "nextWeek"}
-                      defaultChecked={time == "Today"}
                     >
                       Today
                     </option>
                     <option
                       value="Tomorrow"
                       disabled={time == "Today" || time == "nextWeek"}
-                      defaultChecked={time == "Tomorrow"}
                     >
                       Tomorrow
                     </option>
                     <option
                       value="nextWeek"
                       disabled={time == "Today" || time == "Tomorrow"}
-                      defaultChecked={time == "nextWeek"}
                     >
                       Next Week
                     </option>

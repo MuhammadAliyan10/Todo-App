@@ -7,7 +7,7 @@ router.get("/todayTodo", Auth, async (req, res) => {
   try {
     const user = await UserModel.findById(req.user._conditions._id);
     if (!user) {
-      return res.status(404).send("User not found");
+      res.status(500).json({ message: "No user found" });
     }
 
     const sortedTodos = user.todos.sort(
@@ -29,8 +29,6 @@ router.get("/tomorrowTodo", Auth, async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found");
     }
-
-    // Sort todos array in descending order based on createdAt timestamp
     const sortedTodos = user.todos.sort(
       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
     );
@@ -95,7 +93,6 @@ router.post("/addTodo", Auth, async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found");
     }
-
     const newTodo = {
       title,
       list,
@@ -118,10 +115,7 @@ router.delete("/removeTodo/:id", Auth, async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found");
     }
-
     const todoIdToRemove = req.params.id;
-
-    // Remove the todo from the todos array by updating the user document
     await UserModel.findByIdAndUpdate(
       userId,
       { $pull: { todos: { _id: todoIdToRemove } } },

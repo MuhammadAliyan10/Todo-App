@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "../assets/Css/Todo.css";
 import { useTodoContext } from "../Context/TodoContext";
 import "../assets/Css/PopUpBox.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const TodoToday = () => {
   const { allList, setAllLists, todoToday, setTodoToday } = useTodoContext();
   const [todoAdded, isTodoAdded] = useState(false);
@@ -74,7 +76,6 @@ const TodoToday = () => {
   const updatedIsCompleted = async (taskID, currentStatus) => {
     const api = `http://localhost:3000/tasks/updateCompleted/${taskID}`;
     const token = localStorage.getItem("token");
-
     try {
       const res = await fetch(api, {
         method: "PATCH",
@@ -85,8 +86,9 @@ const TodoToday = () => {
         body: JSON.stringify({ isCompleted: !currentStatus }),
       });
 
+      const data = await res.json();
       if (res.ok) {
-        const data = await res.json();
+        isTodoAdded(!todoAdded);
         setTodoToday((prevTodo) =>
           prevTodo.map((todoItem) => {
             if (todoItem._id === taskID) {
@@ -95,9 +97,8 @@ const TodoToday = () => {
             return todoItem;
           })
         );
-        console.log(data);
       } else {
-        throw new Error("Failed to update todo");
+        return toast(data.message);
       }
     } catch (error) {
       console.error("Error updating todo:", error);
@@ -108,7 +109,6 @@ const TodoToday = () => {
     setLoading(true);
     const api = `http://localhost:3000/tasks/removeTodo/${id}`;
     const token = localStorage.getItem("token");
-
     try {
       const response = await fetch(api, {
         method: "DELETE",
@@ -116,9 +116,11 @@ const TodoToday = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      const data = await response.json();
       if (!response.ok) {
-        throw new Error("Failed to delete todo");
+        return toast(data.message);
       }
+      toast(data.message);
       isTodoAdded(true);
     } catch (error) {
       console.error("Error deleting todo:", error);
@@ -127,6 +129,15 @@ const TodoToday = () => {
     }
   };
   const handleAddTodo = async () => {
+    if (!data.title) {
+      return toast("Title is required.");
+    } else if (!data.type) {
+      return toast("Type is required.");
+    } else if (!data.list.title) {
+      return toast("List title is required.");
+    } else if (!data.timeStamps) {
+      return toast("TimeStamps is required.");
+    }
     try {
       const token = localStorage.getItem("token");
       const response = await fetch("http://localhost:3000/tasks/addTodo", {
@@ -137,11 +148,11 @@ const TodoToday = () => {
         },
         body: JSON.stringify(data),
       });
-      console.log(data);
 
       if (!response.ok) {
-        throw new Error("Failed to add todo");
+        return toast("Failed to add todo");
       }
+      toast(response.message);
       setShowBox(false);
       isTodoAdded(true);
       setData({
@@ -163,6 +174,7 @@ const TodoToday = () => {
 
   return (
     <div className="todo my-5">
+      <ToastContainer />
       <div className="container">
         <div className="todoToday">
           <h3>Today</h3>
@@ -192,9 +204,7 @@ const TodoToday = () => {
                         {allList.map((list) => {
                           return (
                             <>
-                              <option hidden key={list._id}>
-                                Select the list...
-                              </option>
+                              <option hidden>Select the list...</option>
                               <option
                                 value={JSON.stringify({
                                   title: list.title,
@@ -229,7 +239,7 @@ const TodoToday = () => {
                     onChange={(e) => onInputChange(e)}
                     name="timeStamps"
                   >
-                    <option hidden>Enter the time...</option>
+                    <option hidden>Enter the time.</option>
                     <option value="Today" defaultChecked>
                       Today
                     </option>
