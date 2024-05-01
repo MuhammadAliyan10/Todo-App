@@ -10,6 +10,7 @@ import Login from "./Auth/Login";
 import Signup from "./Auth/Signup";
 import { useTodoContext } from "./Context/TodoContext";
 import NotFound from "./Pages/NotFound";
+import NotAuthenticated from "./Pages/NotAuthenticated";
 
 function App() {
   const { isLogIn } = useTodoContext();
@@ -22,7 +23,7 @@ function App() {
           <>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<NotAuthenticated />} />
           </>
         ) : (
           <>

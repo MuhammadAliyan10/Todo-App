@@ -7,7 +7,6 @@ const TodoToday = () => {
   const [todoAdded, isTodoAdded] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showBox, setShowBox] = useState(false);
-  const [isTaskCompleted, setIsTaskCompleted] = useState(false);
 
   useEffect(() => {
     const getAllList = async () => {
@@ -45,35 +44,24 @@ const TodoToday = () => {
   const [data, setData] = useState({
     title: "",
     list: {
-      value: "",
+      title: "",
+      color: "",
     },
 
     type: {
       value: "",
     },
     timeStamps: "",
-    isCompleted: isTaskCompleted,
   });
 
   const onInputChange = (e) => {
     const { name, value } = e.target;
-    if (name.startsWith("list")) {
-      const listKey = name.split("_")[1];
+    if (name.startsWith("list_value")) {
+      const selectedList = JSON.parse(value);
+      console.log(selectedList);
       setData((prevData) => ({
         ...prevData,
-        list: {
-          ...prevData.list,
-          [listKey]: value,
-        },
-      }));
-    } else if (name.startsWith("type")) {
-      const typeKey = name.split("_")[1];
-      setData((prevData) => ({
-        ...prevData,
-        type: {
-          ...prevData.type,
-          [typeKey]: value,
-        },
+        list: selectedList,
       }));
     } else {
       setData((prevData) => ({
@@ -82,6 +70,40 @@ const TodoToday = () => {
       }));
     }
   };
+
+  const updatedIsCompleted = async (taskID, currentStatus) => {
+    const api = `http://localhost:3000/tasks/updateCompleted/${taskID}`;
+    const token = localStorage.getItem("token");
+
+    try {
+      const res = await fetch(api, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ isCompleted: !currentStatus }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setTodoToday((prevTodo) =>
+          prevTodo.map((todoItem) => {
+            if (todoItem._id === taskID) {
+              return { ...todoItem, isCompleted: currentStatus };
+            }
+            return todoItem;
+          })
+        );
+        console.log(data);
+      } else {
+        throw new Error("Failed to update todo");
+      }
+    } catch (error) {
+      console.error("Error updating todo:", error);
+    }
+  };
+
   const handleDelete = async (id) => {
     setLoading(true);
     const api = `http://localhost:3000/tasks/removeTodo/${id}`;
@@ -115,6 +137,8 @@ const TodoToday = () => {
         },
         body: JSON.stringify(data),
       });
+      console.log(data);
+
       if (!response.ok) {
         throw new Error("Failed to add todo");
       }
@@ -123,7 +147,8 @@ const TodoToday = () => {
       setData({
         title: "",
         list: {
-          value: "",
+          title: "",
+          color: "",
         },
 
         type: {
@@ -135,17 +160,7 @@ const TodoToday = () => {
       console.error("Error adding todo:", error);
     }
   };
-  const handleTaskCompleted = (taskID) => {
-    setTodoToday((prevTodo) =>
-      prevTodo.map((todoItem) => {
-        if (todoItem._id === taskID) {
-          return { ...todoItem, isCompleted: !todoItem.isCompleted };
-        }
-        setIsTaskCompleted(true);
-        return todoItem;
-      })
-    );
-  };
+
   return (
     <div className="todo my-5">
       <div className="container">
@@ -177,8 +192,17 @@ const TodoToday = () => {
                         {allList.map((list) => {
                           return (
                             <>
-                              <option hidden>Select the list...</option>
-                              <option value={list.title}>{list.title}</option>
+                              <option hidden key={list._id}>
+                                Select the list...
+                              </option>
+                              <option
+                                value={JSON.stringify({
+                                  title: list.title,
+                                  color: list.color,
+                                })}
+                              >
+                                {list.title}
+                              </option>
                             </>
                           );
                         })}
@@ -191,7 +215,7 @@ const TodoToday = () => {
                     id="mySelect"
                     value={data.type.value}
                     onChange={(e) => onInputChange(e)}
-                    name="type_value"
+                    name="type"
                   >
                     <option hidden>Enter the type...</option>
                     <option value="Todo">Todo</option>
@@ -228,8 +252,7 @@ const TodoToday = () => {
                 {todoToday.map((task, index) => {
                   const collapseId = `flush-collapse-${index}`;
                   const dataBsTarget = `#flush-collapse-${index}`;
-                  const typeColor = `${task.type[0]["color"]}`;
-                  const listColor = `${task.list[0]["color"]}`;
+                  const listColor = `${task.list["color"]}`;
                   return (
                     <div
                       className="accordion accordion-flush"
@@ -243,7 +266,9 @@ const TodoToday = () => {
                             type="checkbox"
                             defaultChecked={task.isCompleted}
                             id={`checkbox-${index}`}
-                            onChange={() => handleTaskCompleted(task._id)}
+                            onChange={() =>
+                              updatedIsCompleted(task._id, task.isCompleted)
+                            }
                           />
                           {task.isCompleted ? (
                             <>
@@ -285,7 +310,7 @@ const TodoToday = () => {
                               <li>
                                 <p
                                   style={{
-                                    background: typeColor,
+                                    background: listColor,
                                     color: "#fff",
                                     padding: "4px 8px",
                                     borderRadius: "10px",
@@ -293,7 +318,7 @@ const TodoToday = () => {
                                     fontWeight: "500",
                                   }}
                                 >
-                                  {task.type[0].value}
+                                  {task.type}
                                 </p>
                               </li>
                               <li>
@@ -307,7 +332,7 @@ const TodoToday = () => {
                                     fontWeight: "500",
                                   }}
                                 >
-                                  {task.list[0].value}
+                                  {task.list.title}
                                 </p>
                               </li>
                               {loading ? (

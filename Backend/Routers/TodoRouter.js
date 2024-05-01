@@ -10,7 +10,6 @@ router.get("/todayTodo", Auth, async (req, res) => {
       return res.status(404).send("User not found");
     }
 
-    // Sort todos array in descending order based on createdAt timestamp
     const sortedTodos = user.todos.sort(
       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
     );
@@ -45,6 +44,29 @@ router.get("/tomorrowTodo", Auth, async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
+
+router.patch("/updateCompleted/:taskID", Auth, async (req, res) => {
+  try {
+    const userId = req.user._conditions._id;
+    const taskId = req.params.taskID;
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    const task = user.todos.find((todo) => todo._id.toString() == taskId);
+    if (!task) {
+      return res.status(404).send("Task not found");
+    }
+    task.isCompleted = req.body.isCompleted;
+    await user.save();
+
+    res.status(200).json({ message: "Todo updated successfully" });
+    user.save();
+  } catch (error) {
+    console.error("Error retrieving today's todos:", error);
+    res.status(500).send("Internal server error");
+  }
+});
 router.get("/nextWeekTodo", Auth, async (req, res) => {
   try {
     const user = await UserModel.findById(req.user._conditions._id);
@@ -68,7 +90,7 @@ router.get("/nextWeekTodo", Auth, async (req, res) => {
 
 router.post("/addTodo", Auth, async (req, res) => {
   try {
-    const { title, list, type, timeStamps, isCompleted } = req.body;
+    const { title, list, type, timeStamps } = req.body;
     const user = await UserModel.findById(req.user._conditions._id);
     if (!user) {
       return res.status(404).send("User not found");
@@ -79,7 +101,6 @@ router.post("/addTodo", Auth, async (req, res) => {
       list,
       type,
       timeStamps,
-      isCompleted,
     };
     user.todos.push(newTodo);
     await user.save();

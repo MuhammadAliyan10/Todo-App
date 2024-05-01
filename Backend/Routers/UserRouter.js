@@ -3,7 +3,21 @@ const router = express.Router();
 const UserModel = require("../Models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Auth = require("../Middleware/Auth.js");
 require("dotenv").config();
+
+router.get("/getUser", Auth, async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.user._conditions._id);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    res.json({ username: user.username, email: user.email });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+});
 
 router.post("/signup", async (req, res) => {
   try {

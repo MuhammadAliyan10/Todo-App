@@ -135,7 +135,7 @@ const Sidebar = () => {
               </>
             )}
           </ul>
-          <div className="background">
+          <div className="add_list_parent">
             {showBox && (
               <div className="box__list">
                 <h4>Add List</h4>

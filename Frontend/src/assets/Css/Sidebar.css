@@ -109,3 +109,17 @@
   font-size: 14px;
   margin: 15px 1.4rem;
 }
+
+.lists {
+  overflow-y: scroll;
+  height: 50vh;
+  overflow-x: hidden;
+}
+
+.add_list_parent {
+  position: absolute; /* or absolute */
+  top: 50%; /* Adjust top position as needed */
+  left: 155%; /* Adjust left position as needed */
+  z-index: 9999; /* Ensure it's above other elements */
+  background-color: transparent;
+}

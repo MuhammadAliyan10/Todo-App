@@ -3,6 +3,7 @@ import "../assets/Css/Auth.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useTodoContext } from "../Context/TodoContext";
 const Login = () => {
+  const navigate = useNavigate();
   const { setIsLogIn } = useTodoContext();
   const [data, setData] = useState({ email: "", password: "" });
   const onChangeHandler = (e) => {
@@ -22,9 +23,11 @@ const Login = () => {
         body: JSON.stringify(data),
       });
       const res = await response.json();
+
       if (res.status == 200) {
         localStorage.setItem("token", res.token);
         setIsLogIn(true);
+        navigate("/");
       }
     } catch (err) {
       console.log(err);

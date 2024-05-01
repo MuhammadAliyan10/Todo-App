@@ -21,7 +21,7 @@ const Signup = () => {
       body: JSON.stringify(data),
     });
     if (dataApi.ok) {
-      console.log("Error while adding user");
+      navigate("/login");
     }
     setIsLogIn(true);
   };

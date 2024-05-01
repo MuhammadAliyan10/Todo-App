@@ -15,7 +15,7 @@ const TodoUpComing = () => {
   const [showBox, setShowBox] = useState(false);
   const [todoAdded, isTodoAdded] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isTaskCompleted, setIsTaskCompleted] = useState(false);
+  const [time, setTime] = useState("");
 
   useEffect(() => {
     const getTodayTodo = async () => {
@@ -73,35 +73,24 @@ const TodoUpComing = () => {
   const [data, setData] = useState({
     title: "",
     list: {
-      value: "",
+      title: "",
+      color: "",
     },
 
     type: {
       value: "",
     },
     timeStamps: "",
-    isCompleted: isTaskCompleted,
   });
 
   const onInputChange = (e) => {
     const { name, value } = e.target;
-    if (name.startsWith("list")) {
-      const listKey = name.split("_")[1];
+    if (name.startsWith("list_value")) {
+      const selectedList = JSON.parse(value);
+      console.log(selectedList);
       setData((prevData) => ({
         ...prevData,
-        list: {
-          ...prevData.list,
-          [listKey]: value,
-        },
-      }));
-    } else if (name.startsWith("type")) {
-      const typeKey = name.split("_")[1];
-      setData((prevData) => ({
-        ...prevData,
-        type: {
-          ...prevData.type,
-          [typeKey]: value,
-        },
+        list: selectedList,
       }));
     } else {
       setData((prevData) => ({
@@ -132,6 +121,23 @@ const TodoUpComing = () => {
       setLoading(false);
     }
   };
+
+  const showBoxHandler = (time) => {
+    setTime(time);
+    setShowBox(true);
+    setData({
+      title: "",
+      list: {
+        title: "",
+        color: "",
+      },
+
+      type: {
+        value: "",
+      },
+      timeStamps: "",
+    });
+  };
   const handleAddTodo = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -151,7 +157,8 @@ const TodoUpComing = () => {
       setData({
         title: "",
         list: {
-          value: "",
+          title: "",
+          color: "",
         },
 
         type: {
@@ -163,16 +170,38 @@ const TodoUpComing = () => {
       console.error("Error adding todo:", error);
     }
   };
-  const handleTaskCompleted = (taskID) => {
-    setTodoToday((prevTodo) =>
-      prevTodo.map((todoItem) => {
-        if (todoItem._id === taskID) {
-          return { ...todoItem, isCompleted: !todoItem.isCompleted };
-        }
-        setIsTaskCompleted(true);
-        return todoItem;
-      })
-    );
+
+  const updatedIsCompleted = async (taskID, currentStatus) => {
+    const api = `http://localhost:3000/tasks/updateCompleted/${taskID}`;
+    const token = localStorage.getItem("token");
+
+    try {
+      const res = await fetch(api, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ isCompleted: !currentStatus }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setTodoToday((prevTodo) =>
+          prevTodo.map((todoItem) => {
+            if (todoItem._id === taskID) {
+              return { ...todoItem, isCompleted: currentStatus };
+            }
+            return todoItem;
+          })
+        );
+        console.log(data);
+      } else {
+        throw new Error("Failed to update todo");
+      }
+    } catch (error) {
+      console.error("Error updating todo:", error);
+    }
   };
 
   return (
@@ -181,10 +210,13 @@ const TodoUpComing = () => {
         <div className="today__task">
           <h3>Today</h3>
           <div className="task__todo mt-3">
-            <button className="create__todo" onClick={() => setShowBox(true)}>
+            <button
+              className="create__todo"
+              onClick={() => showBoxHandler("Today")}
+            >
               <i className="fa-solid fa-plus"></i> Add New Task
             </button>
-            <div className="background">
+            <div className="background2">
               {showBox && (
                 <div className="box">
                   <h4>Add Task</h4>
@@ -207,7 +239,14 @@ const TodoUpComing = () => {
                           return (
                             <>
                               <option hidden>Select the list...</option>
-                              <option value={list.title}>{list.title}</option>
+                              <option
+                                value={JSON.stringify({
+                                  title: list.title,
+                                  color: list.color,
+                                })}
+                              >
+                                {list.title}
+                              </option>
                             </>
                           );
                         })}
@@ -220,7 +259,7 @@ const TodoUpComing = () => {
                     id="mySelect"
                     value={data.type.value}
                     onChange={(e) => onInputChange(e)}
-                    name="type_value"
+                    name="type"
                   >
                     <option hidden>Enter the type...</option>
                     <option value="Todo">Todo</option>
@@ -234,14 +273,25 @@ const TodoUpComing = () => {
                     onChange={(e) => onInputChange(e)}
                     name="timeStamps"
                   >
-                    <option hidden>Enter the time...</option>
-                    <option value="Today" disabled>
+                    <option
+                      value="Today"
+                      disabled={time == "Tomorrow" || time == "nextWeek"}
+                      defaultChecked={time == "Today"}
+                    >
                       Today
                     </option>
-                    <option value="Tomorrow" defaultChecked>
+                    <option
+                      value="Tomorrow"
+                      disabled={time == "Today" || time == "nextWeek"}
+                      defaultChecked={time == "Tomorrow"}
+                    >
                       Tomorrow
                     </option>
-                    <option value="nextWeek" disabled>
+                    <option
+                      value="nextWeek"
+                      disabled={time == "Today" || time == "Tomorrow"}
+                      defaultChecked={time == "nextWeek"}
+                    >
                       Next Week
                     </option>
                   </select>
@@ -255,10 +305,10 @@ const TodoUpComing = () => {
             {todoToday.length > 0 ? (
               <div className="my__tasks">
                 {todoToday.map((task, index) => {
-                  const collapseId = `flush-collapse-${index}`;
-                  const dataBsTarget = `#flush-collapse-${index}`;
-                  const typeColor = `${task.type[0]["color"]}`;
-                  const listColor = `${task.list[0]["color"]}`;
+                  const collapseId = `flush-collapse-${task._id}`;
+                  const dataBsTarget = `#flush-collapse-${task._id}`;
+
+                  const listColor = `${task.list["color"]}`;
                   return (
                     <div
                       className="accordion accordion-flush"
@@ -272,7 +322,9 @@ const TodoUpComing = () => {
                             type="checkbox"
                             defaultChecked={task.isCompleted}
                             id={`checkbox-${index}`}
-                            onChange={() => handleTaskCompleted(task._id)}
+                            onChange={() =>
+                              updatedIsCompleted(task._id, task.isCompleted)
+                            }
                           />
                           {task.isCompleted ? (
                             <>
@@ -314,7 +366,7 @@ const TodoUpComing = () => {
                               <li>
                                 <p
                                   style={{
-                                    background: typeColor,
+                                    background: listColor,
                                     color: "#fff",
                                     padding: "4px 8px",
                                     borderRadius: "10px",
@@ -322,7 +374,7 @@ const TodoUpComing = () => {
                                     fontWeight: "500",
                                   }}
                                 >
-                                  {task.type[0].value}
+                                  {task.type}
                                 </p>
                               </li>
                               <li>
@@ -336,7 +388,7 @@ const TodoUpComing = () => {
                                     fontWeight: "500",
                                   }}
                                 >
-                                  {task.list[0].value}
+                                  {task.list.title}
                                 </p>
                               </li>
                               {loading ? (
@@ -372,89 +424,17 @@ const TodoUpComing = () => {
                 <div className="task__todo mt-3">
                   <button
                     className="create__todo"
-                    onClick={() => setShowBox(true)}
+                    onClick={() => showBoxHandler("Tomorrow")}
                   >
                     <i className="fa-solid fa-plus"></i> Add New Task
                   </button>
-                  <div className="background">
-                    {showBox && (
-                      <div className="box">
-                        <h4>Add Task</h4>
-                        <input
-                          value={data.title}
-                          type="text"
-                          name="title"
-                          placeholder="Enter the title..."
-                          onChange={(e) => onInputChange(e)}
-                        />
-                        <select
-                          id="mySelect"
-                          value={data.list.value}
-                          onChange={(e) => onInputChange(e)}
-                          name="list_value"
-                        >
-                          {allList.length > 0 ? (
-                            <>
-                              {allList.map((list) => {
-                                return (
-                                  <>
-                                    <option hidden>Select the list...</option>
-                                    <option value={list.title}>
-                                      {list.title}
-                                    </option>
-                                  </>
-                                );
-                              })}
-                            </>
-                          ) : (
-                            <option hidden>No list found</option>
-                          )}
-                        </select>
-                        <select
-                          id="mySelect"
-                          value={data.type.value}
-                          onChange={(e) => onInputChange(e)}
-                          name="type_value"
-                        >
-                          <option hidden>Enter the type...</option>
-                          <option value="Todo">Todo</option>
-                          <option value="Reminder">Reminder</option>
-                          <option value="Desire">Desire</option>
-                        </select>
-
-                        <select
-                          id="mySelect"
-                          value={data.timeStamps}
-                          onChange={(e) => onInputChange(e)}
-                          name="timeStamps"
-                        >
-                          <option hidden>Enter the time...</option>
-                          <option value="Today" defaultChecked>
-                            Today
-                          </option>
-                          <option value="Tomorrow" disabled>
-                            Tomorrow
-                          </option>
-                          <option value="nextWeek" disabled>
-                            Next Week
-                          </option>
-                        </select>
-                        <div className="box__buttons">
-                          <button onClick={handleAddTodo}>Add</button>
-                          <button onClick={() => setShowBox(false)}>
-                            Close
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
                   {todoTomorrow.length > 0 ? (
                     <div className="my__tasks">
                       {todoTomorrow.map((task, index) => {
-                        const collapseId = `flush-collapse-${index}`;
-                        const dataBsTarget = `#flush-collapse-${index}`;
-                        const typeColor = `${task.type[0]["color"]}`;
-                        const listColor = `${task.list[0]["color"]}`;
+                        const collapseId = `flush-collapse-${index + 1}`;
+                        const dataBsTarget = `#flush-collapse-${index + 1}`;
+
+                        const listColor = `${task.list["color"]}`;
                         return (
                           <div
                             className="accordion accordion-flush"
@@ -468,7 +448,12 @@ const TodoUpComing = () => {
                                   type="checkbox"
                                   defaultChecked={task.isCompleted}
                                   id={`checkbox-${index}`}
-                                  onChange={() => handleTaskCompleted(task._id)}
+                                  onChange={() =>
+                                    updatedIsCompleted(
+                                      task._id,
+                                      task.isCompleted
+                                    )
+                                  }
                                 />
                                 {task.isCompleted ? (
                                   <>
@@ -510,7 +495,7 @@ const TodoUpComing = () => {
                                     <li>
                                       <p
                                         style={{
-                                          background: typeColor,
+                                          background: listColor,
                                           color: "#fff",
                                           padding: "4px 8px",
                                           borderRadius: "10px",
@@ -518,7 +503,7 @@ const TodoUpComing = () => {
                                           fontWeight: "500",
                                         }}
                                       >
-                                        {task.type[0].value}
+                                        {task.type}
                                       </p>
                                     </li>
                                     <li>
@@ -532,7 +517,7 @@ const TodoUpComing = () => {
                                           fontWeight: "500",
                                         }}
                                       >
-                                        {task.list[0].value}
+                                        {task.list.title}
                                       </p>
                                     </li>
                                     {loading ? (
@@ -567,89 +552,18 @@ const TodoUpComing = () => {
                 <div className="task__todo mt-3">
                   <button
                     className="create__todo"
-                    onClick={() => setShowBox(true)}
+                    onClick={() => showBoxHandler("nextWeek")}
                   >
                     <i className="fa-solid fa-plus"></i> Add New Task
                   </button>
-                  <div className="background">
-                    {showBox && (
-                      <div className="box">
-                        <h4>Add Task</h4>
-                        <input
-                          value={data.title}
-                          type="text"
-                          name="title"
-                          placeholder="Enter the title..."
-                          onChange={(e) => onInputChange(e)}
-                        />
-                        <select
-                          id="mySelect"
-                          value={data.list.value}
-                          onChange={(e) => onInputChange(e)}
-                          name="list_value"
-                        >
-                          {allList.length > 0 ? (
-                            <>
-                              {allList.map((list) => {
-                                return (
-                                  <>
-                                    <option hidden>Select the list...</option>
-                                    <option value={list.title}>
-                                      {list.title}
-                                    </option>
-                                  </>
-                                );
-                              })}
-                            </>
-                          ) : (
-                            <option hidden>No list found</option>
-                          )}
-                        </select>
-                        <select
-                          id="mySelect"
-                          value={data.type.value}
-                          onChange={(e) => onInputChange(e)}
-                          name="type_value"
-                        >
-                          <option hidden>Enter the type...</option>
-                          <option value="Todo">Todo</option>
-                          <option value="Reminder">Reminder</option>
-                          <option value="Desire">Desire</option>
-                        </select>
 
-                        <select
-                          id="mySelect"
-                          value={data.timeStamps}
-                          onChange={(e) => onInputChange(e)}
-                          name="timeStamps"
-                        >
-                          <option hidden>Enter the time...</option>
-                          <option value="Today" disabled>
-                            Today
-                          </option>
-                          <option value="Tomorrow" disabled>
-                            Tomorrow
-                          </option>
-                          <option value="nextWeek" defaultChecked>
-                            Next Week
-                          </option>
-                        </select>
-                        <div className="box__buttons">
-                          <button onClick={handleAddTodo}>Add</button>
-                          <button onClick={() => setShowBox(false)}>
-                            Close
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
                   {todoNextWeek.length > 0 ? (
                     <div className="my__tasks">
                       {todoNextWeek.map((task, index) => {
                         const collapseId = `flush-collapse-${index}`;
                         const dataBsTarget = `#flush-collapse-${index}`;
-                        const typeColor = `${task.type[0]["color"]}`;
-                        const listColor = `${task.list[0]["color"]}`;
+
+                        const listColor = `${task.list["color"]}`;
                         return (
                           <div
                             className="accordion accordion-flush"
@@ -663,7 +577,12 @@ const TodoUpComing = () => {
                                   type="checkbox"
                                   defaultChecked={task.isCompleted}
                                   id={`checkbox-${index}`}
-                                  onChange={() => handleTaskCompleted(task._id)}
+                                  onChange={() =>
+                                    updatedIsCompleted(
+                                      task._id,
+                                      task.isCompleted
+                                    )
+                                  }
                                 />
                                 {task.isCompleted ? (
                                   <>
@@ -705,7 +624,7 @@ const TodoUpComing = () => {
                                     <li>
                                       <p
                                         style={{
-                                          background: typeColor,
+                                          background: listColor,
                                           color: "#fff",
                                           padding: "4px 8px",
                                           borderRadius: "10px",
@@ -713,7 +632,7 @@ const TodoUpComing = () => {
                                           fontWeight: "500",
                                         }}
                                       >
-                                        {task.type[0].value}
+                                        {task.type}
                                       </p>
                                     </li>
                                     <li>
@@ -727,7 +646,7 @@ const TodoUpComing = () => {
                                           fontWeight: "500",
                                         }}
                                       >
-                                        {task.list[0].value}
+                                        {task.list.title}
                                       </p>
                                     </li>
                                     {loading ? (
