@@ -224,128 +224,141 @@ const TodoUpComing = () => {
   };
 
   return (
-    <div className="todo my-5">
-      <ToastContainer />
-      <div className="container">
-        <div className="today__task">
-          <h3>Today</h3>
-          <div className="task__todo mt-3">
-            <button
-              className="create__todo"
-              onClick={() => showBoxHandler("Today")}
-            >
-              <i className="fa-solid fa-plus"></i> Add New Task
-            </button>
-            <div className="background2">
-              {showBox && (
-                <div className="box">
-                  <h4>Add Task</h4>
-                  <input
-                    value={data.title}
-                    type="text"
-                    name="title"
-                    placeholder="Enter the title..."
-                    onChange={(e) => onInputChange(e)}
-                  />
-                  <select
-                    id="mySelect"
-                    value={data.list.value}
-                    onChange={(e) => onInputChange(e)}
-                    name="list_value"
-                  >
-                    {allList.length > 0 ? (
-                      <>
-                        {allList.map((list) => {
-                          return (
-                            <>
-                              <option hidden>Select the list...</option>
-                              <option
-                                value={JSON.stringify({
-                                  title: list.title,
-                                  color: list.color,
-                                })}
-                              >
-                                {list.title}
-                              </option>
-                            </>
-                          );
-                        })}
-                      </>
-                    ) : (
-                      <option hidden>No list found</option>
-                    )}
-                  </select>
-                  <select
-                    id="mySelect"
-                    value={data.type.value}
-                    onChange={(e) => onInputChange(e)}
-                    name="type"
-                  >
-                    <option hidden>Enter the type...</option>
-                    <option value="Todo">Todo</option>
-                    <option value="Reminder">Reminder</option>
-                    <option value="Desire">Desire</option>
-                  </select>
+    <div className="todoUpComming">
+      <div className="todo my-5">
+        <ToastContainer />
+        <div className="container">
+          <div className="today__task">
+            <h3>Today</h3>
+            <div className="task__todo mt-3">
+              <button
+                className="create__todo"
+                onClick={() => showBoxHandler("Today")}
+              >
+                <i className="fa-solid fa-plus"></i> Add New Task
+              </button>
+              <div className="background2">
+                {showBox && (
+                  <div className="box">
+                    <h4>Add Task</h4>
+                    <input
+                      value={data.title}
+                      type="text"
+                      name="title"
+                      placeholder="Enter the title..."
+                      onChange={(e) => onInputChange(e)}
+                    />
+                    <select
+                      id="mySelect"
+                      value={data.list.value}
+                      onChange={(e) => onInputChange(e)}
+                      name="list_value"
+                    >
+                      {allList.length > 0 ? (
+                        <>
+                          {allList.map((list) => {
+                            return (
+                              <>
+                                <option hidden>Select the list...</option>
+                                <option
+                                  value={JSON.stringify({
+                                    title: list.title,
+                                    color: list.color,
+                                  })}
+                                >
+                                  {list.title}
+                                </option>
+                              </>
+                            );
+                          })}
+                        </>
+                      ) : (
+                        <option hidden>No list found</option>
+                      )}
+                    </select>
+                    <select
+                      id="mySelect"
+                      value={data.type.value}
+                      onChange={(e) => onInputChange(e)}
+                      name="type"
+                    >
+                      <option hidden>Enter the type...</option>
+                      <option value="Todo">Todo</option>
+                      <option value="Reminder">Reminder</option>
+                      <option value="Desire">Desire</option>
+                    </select>
 
-                  <select
-                    id="mySelect"
-                    value={data.timeStamps}
-                    onChange={(e) => onInputChange(e)}
-                    name="timeStamps"
-                  >
-                    <option hidden>Enter the time.</option>
-                    <option
-                      value="Today"
-                      disabled={time == "Tomorrow" || time == "nextWeek"}
+                    <select
+                      id="mySelect"
+                      value={data.timeStamps}
+                      onChange={(e) => onInputChange(e)}
+                      name="timeStamps"
                     >
-                      Today
-                    </option>
-                    <option
-                      value="Tomorrow"
-                      disabled={time == "Today" || time == "nextWeek"}
-                    >
-                      Tomorrow
-                    </option>
-                    <option
-                      value="nextWeek"
-                      disabled={time == "Today" || time == "Tomorrow"}
-                    >
-                      Next Week
-                    </option>
-                  </select>
-                  <div className="box__buttons">
-                    <button onClick={handleAddTodo}>Add</button>
-                    <button onClick={() => setShowBox(false)}>Close</button>
+                      <option hidden>Enter the time.</option>
+                      <option
+                        value="Today"
+                        disabled={time == "Tomorrow" || time == "nextWeek"}
+                      >
+                        Today
+                      </option>
+                      <option
+                        value="Tomorrow"
+                        disabled={time == "Today" || time == "nextWeek"}
+                      >
+                        Tomorrow
+                      </option>
+                      <option
+                        value="nextWeek"
+                        disabled={time == "Today" || time == "Tomorrow"}
+                      >
+                        Next Week
+                      </option>
+                    </select>
+                    <div className="box__buttons">
+                      <button onClick={handleAddTodo}>Add</button>
+                      <button onClick={() => setShowBox(false)}>Close</button>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-            {todoToday.length > 0 ? (
-              <div className="my__tasks">
-                {todoToday.map((task, index) => {
-                  const collapseId = `flush-collapse-${task._id}`;
-                  const dataBsTarget = `#flush-collapse-${task._id}`;
+                )}
+              </div>
+              {todoToday.length > 0 ? (
+                <div className="my__tasks">
+                  {todoToday.map((task, index) => {
+                    const collapseId = `flush-collapse-${task._id}`;
+                    const dataBsTarget = `#flush-collapse-${task._id}`;
 
-                  const listColor = `${task.list["color"]}`;
-                  return (
-                    <div
-                      className="accordion accordion-flush"
-                      id="accordionFlushExample"
-                      key={task._id}
-                    >
-                      <div className="accordion-item">
-                        <h2 className="accordion-header">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            defaultChecked={task.isCompleted}
-                            id={`checkbox-${index}`}
-                            onChange={() =>
-                              updatedIsCompleted(task._id, task.isCompleted)
-                            }
-                          />
-                          {task.isCompleted ? (
-                            <>
+                    const listColor = `${task.list["color"]}`;
+                    return (
+                      <div
+                        className="accordion accordion-flush"
+                        id="accordionFlushExample"
+                        key={task._id}
+                      >
+                        <div className="accordion-item">
+                          <h2 className="accordion-header">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              defaultChecked={task.isCompleted}
+                              id={`checkbox-${index}`}
+                              onChange={() =>
+                                updatedIsCompleted(task._id, task.isCompleted)
+                              }
+                            />
+                            {task.isCompleted ? (
+                              <>
+                                <button
+                                  className="accordion-button collapsed"
+                                  type="button"
+                                  data-bs-toggle="collapse"
+                                  data-bs-target={dataBsTarget}
+                                  aria-expanded="false"
+                                  aria-controls={collapseId}
+                                >
+                                  <s>{task.title}</s>
+                                </button>
+                              </>
+                            ) : (
                               <button
                                 className="accordion-button collapsed"
                                 type="button"
@@ -354,127 +367,127 @@ const TodoUpComing = () => {
                                 aria-expanded="false"
                                 aria-controls={collapseId}
                               >
-                                <s>{task.title}</s>
+                                {task.title}
                               </button>
-                            </>
-                          ) : (
-                            <button
-                              className="accordion-button collapsed"
-                              type="button"
-                              data-bs-toggle="collapse"
-                              data-bs-target={dataBsTarget}
-                              aria-expanded="false"
-                              aria-controls={collapseId}
-                            >
-                              {task.title}
-                            </button>
-                          )}
-                        </h2>
-                        <div
-                          id={collapseId}
-                          className="accordion-collapse collapse"
-                          data-bs-parent="#accordionFlushExample"
-                        >
-                          <div className="accordion-body">
-                            <ul className="task__additional">
-                              <li>
-                                <i className="fa-solid fa-calendar-days"></i>
-                                <p>{task.createdAt}</p>
-                              </li>
-                              <li>
-                                <p
-                                  style={{
-                                    background: listColor,
-                                    color: "#fff",
-                                    padding: "4px 8px",
-                                    borderRadius: "10px",
-                                    fontSize: "10px",
-                                    fontWeight: "500",
-                                  }}
-                                >
-                                  {task.type}
-                                </p>
-                              </li>
-                              <li>
-                                <p
-                                  style={{
-                                    background: listColor,
-                                    color: "#fff",
-                                    padding: "4px 8px",
-                                    borderRadius: "10px",
-                                    fontSize: "10px",
-                                    fontWeight: "500",
-                                  }}
-                                >
-                                  {task.list.title}
-                                </p>
-                              </li>
-                              {loading ? (
-                                <p>Deleting....</p>
-                              ) : (
-                                <li
-                                  className="deleteTodo"
-                                  onClick={() => {
-                                    handleDelete(task._id);
-                                  }}
-                                >
-                                  <i className="fa-solid fa-trash"></i>
+                            )}
+                          </h2>
+                          <div
+                            id={collapseId}
+                            className="accordion-collapse collapse"
+                            data-bs-parent="#accordionFlushExample"
+                          >
+                            <div className="accordion-body">
+                              <ul className="task__additional">
+                                <li>
+                                  <i className="fa-solid fa-calendar-days"></i>
+                                  <p>{task.createdAt}</p>
                                 </li>
-                              )}
-                            </ul>
+                                <li>
+                                  <p
+                                    style={{
+                                      background: listColor,
+                                      color: "#fff",
+                                      padding: "4px 8px",
+                                      borderRadius: "10px",
+                                      fontSize: "10px",
+                                      fontWeight: "500",
+                                    }}
+                                  >
+                                    {task.type}
+                                  </p>
+                                </li>
+                                <li>
+                                  <p
+                                    style={{
+                                      background: listColor,
+                                      color: "#fff",
+                                      padding: "4px 8px",
+                                      borderRadius: "10px",
+                                      fontSize: "10px",
+                                      fontWeight: "500",
+                                    }}
+                                  >
+                                    {task.list.title}
+                                  </p>
+                                </li>
+                                {loading ? (
+                                  <p>Deleting....</p>
+                                ) : (
+                                  <li
+                                    className="deleteTodo"
+                                    onClick={() => {
+                                      handleDelete(task._id);
+                                    }}
+                                  >
+                                    <i className="fa-solid fa-trash"></i>
+                                  </li>
+                                )}
+                              </ul>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <p className="no__todo">No Todo, Please add one.</p>
-            )}
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="no__todo">No Todo, Please add one.</p>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="next__task my-4">
-          <div className="row">
-            <div className="col-sm-7">
-              <div className="tomorrow__tasks">
-                <h3>Tomorrow</h3>
-                <div className="task__todo mt-3">
-                  <button
-                    className="create__todo"
-                    onClick={() => showBoxHandler("Tomorrow")}
-                  >
-                    <i className="fa-solid fa-plus"></i> Add New Task
-                  </button>
-                  {todoTomorrow.length > 0 ? (
-                    <div className="my__tasks">
-                      {todoTomorrow.map((task, index) => {
-                        const collapseId = `flush-collapse-${index + 1}`;
-                        const dataBsTarget = `#flush-collapse-${index + 1}`;
+          <div className="next__task my-4">
+            <div className="row">
+              <div className="col-sm-6 col-md-6 col-lg-7">
+                <div className="tomorrow__tasks">
+                  <h3>Tomorrow</h3>
+                  <div className="task__todo mt-3">
+                    <button
+                      className="create__todo"
+                      onClick={() => showBoxHandler("Tomorrow")}
+                    >
+                      <i className="fa-solid fa-plus"></i> Add New Task
+                    </button>
+                    {todoTomorrow.length > 0 ? (
+                      <div className="my__tasks">
+                        {todoTomorrow.map((task, index) => {
+                          const collapseId = `flush-collapse-${index + 1}`;
+                          const dataBsTarget = `#flush-collapse-${index + 1}`;
 
-                        const listColor = `${task.list["color"]}`;
-                        return (
-                          <div
-                            className="accordion accordion-flush"
-                            id="accordionFlushExample"
-                            key={task._id}
-                          >
-                            <div className="accordion-item">
-                              <h2 className="accordion-header">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  defaultChecked={task.isCompleted}
-                                  id={`checkbox-${index}`}
-                                  onChange={() =>
-                                    updatedIsCompleted(
-                                      task._id,
-                                      task.isCompleted
-                                    )
-                                  }
-                                />
-                                {task.isCompleted ? (
-                                  <>
+                          const listColor = `${task.list["color"]}`;
+                          return (
+                            <div
+                              className="accordion accordion-flush"
+                              id="accordionFlushExample"
+                              key={task._id}
+                            >
+                              <div className="accordion-item">
+                                <h2 className="accordion-header">
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    defaultChecked={task.isCompleted}
+                                    id={`checkbox-${index}`}
+                                    onChange={() =>
+                                      updatedIsCompleted(
+                                        task._id,
+                                        task.isCompleted
+                                      )
+                                    }
+                                  />
+                                  {task.isCompleted ? (
+                                    <>
+                                      <button
+                                        className="accordion-button collapsed"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target={dataBsTarget}
+                                        aria-expanded="false"
+                                        aria-controls={collapseId}
+                                      >
+                                        <s>{task.title}</s>
+                                      </button>
+                                    </>
+                                  ) : (
                                     <button
                                       className="accordion-button collapsed"
                                       type="button"
@@ -483,127 +496,127 @@ const TodoUpComing = () => {
                                       aria-expanded="false"
                                       aria-controls={collapseId}
                                     >
-                                      <s>{task.title}</s>
+                                      {task.title}
                                     </button>
-                                  </>
-                                ) : (
-                                  <button
-                                    className="accordion-button collapsed"
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target={dataBsTarget}
-                                    aria-expanded="false"
-                                    aria-controls={collapseId}
-                                  >
-                                    {task.title}
-                                  </button>
-                                )}
-                              </h2>
-                              <div
-                                id={collapseId}
-                                className="accordion-collapse collapse"
-                                data-bs-parent="#accordionFlushExample"
-                              >
-                                <div className="accordion-body">
-                                  <ul className="task__additional">
-                                    <li>
-                                      <i className="fa-solid fa-calendar-days"></i>
-                                      <p>{task.createdAt}</p>
-                                    </li>
-                                    <li>
-                                      <p
-                                        style={{
-                                          background: listColor,
-                                          color: "#fff",
-                                          padding: "4px 8px",
-                                          borderRadius: "10px",
-                                          fontSize: "10px",
-                                          fontWeight: "500",
-                                        }}
-                                      >
-                                        {task.type}
-                                      </p>
-                                    </li>
-                                    <li>
-                                      <p
-                                        style={{
-                                          background: listColor,
-                                          color: "#fff",
-                                          padding: "4px 8px",
-                                          borderRadius: "10px",
-                                          fontSize: "10px",
-                                          fontWeight: "500",
-                                        }}
-                                      >
-                                        {task.list.title}
-                                      </p>
-                                    </li>
-                                    {loading ? (
-                                      <p>Deleting....</p>
-                                    ) : (
-                                      <li
-                                        className="deleteTodo"
-                                        onClick={() => {
-                                          handleDelete(task._id);
-                                        }}
-                                      >
-                                        <i className="fa-solid fa-trash"></i>
+                                  )}
+                                </h2>
+                                <div
+                                  id={collapseId}
+                                  className="accordion-collapse collapse"
+                                  data-bs-parent="#accordionFlushExample"
+                                >
+                                  <div className="accordion-body">
+                                    <ul className="task__additional">
+                                      <li>
+                                        <i className="fa-solid fa-calendar-days"></i>
+                                        <p>{task.createdAt}</p>
                                       </li>
-                                    )}
-                                  </ul>
+                                      <li>
+                                        <p
+                                          style={{
+                                            background: listColor,
+                                            color: "#fff",
+                                            padding: "4px 8px",
+                                            borderRadius: "10px",
+                                            fontSize: "10px",
+                                            fontWeight: "500",
+                                          }}
+                                        >
+                                          {task.type}
+                                        </p>
+                                      </li>
+                                      <li>
+                                        <p
+                                          style={{
+                                            background: listColor,
+                                            color: "#fff",
+                                            padding: "4px 8px",
+                                            borderRadius: "10px",
+                                            fontSize: "10px",
+                                            fontWeight: "500",
+                                          }}
+                                        >
+                                          {task.list.title}
+                                        </p>
+                                      </li>
+                                      {loading ? (
+                                        <p>Deleting....</p>
+                                      ) : (
+                                        <li
+                                          className="deleteTodo"
+                                          onClick={() => {
+                                            handleDelete(task._id);
+                                          }}
+                                        >
+                                          <i className="fa-solid fa-trash"></i>
+                                        </li>
+                                      )}
+                                    </ul>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <p className="no__todo">No Todo, Please add one.</p>
-                  )}
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="no__todo">No Todo, Please add one.</p>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-sm-5">
-              <div className="weekly__tasks">
-                <h3>Weekly</h3>
-                <div className="task__todo mt-3">
-                  <button
-                    className="create__todo"
-                    onClick={() => showBoxHandler("nextWeek")}
-                  >
-                    <i className="fa-solid fa-plus"></i> Add New Task
-                  </button>
+              <div className="col-sm-6 col-md-6 col-lg-5">
+                <div className="weekly__tasks">
+                  <h3>Weekly</h3>
+                  <div className="task__todo mt-3">
+                    <button
+                      className="create__todo"
+                      onClick={() => showBoxHandler("nextWeek")}
+                    >
+                      <i className="fa-solid fa-plus"></i> Add New Task
+                    </button>
 
-                  {todoNextWeek.length > 0 ? (
-                    <div className="my__tasks">
-                      {todoNextWeek.map((task, index) => {
-                        const collapseId = `flush-collapse-${index}`;
-                        const dataBsTarget = `#flush-collapse-${index}`;
+                    {todoNextWeek.length > 0 ? (
+                      <div className="my__tasks">
+                        {todoNextWeek.map((task, index) => {
+                          const collapseId = `flush-collapse-${index}`;
+                          const dataBsTarget = `#flush-collapse-${index}`;
 
-                        const listColor = `${task.list["color"]}`;
-                        return (
-                          <div
-                            className="accordion accordion-flush"
-                            id="accordionFlushExample"
-                            key={task._id}
-                          >
-                            <div className="accordion-item">
-                              <h2 className="accordion-header">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  defaultChecked={task.isCompleted}
-                                  id={`checkbox-${index}`}
-                                  onChange={() =>
-                                    updatedIsCompleted(
-                                      task._id,
-                                      task.isCompleted
-                                    )
-                                  }
-                                />
-                                {task.isCompleted ? (
-                                  <>
+                          const listColor = `${task.list["color"]}`;
+                          return (
+                            <div
+                              className="accordion accordion-flush"
+                              id="accordionFlushExample"
+                              key={task._id}
+                            >
+                              <div className="accordion-item">
+                                <h2 className="accordion-header">
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    defaultChecked={task.isCompleted}
+                                    id={`checkbox-${index}`}
+                                    onChange={() =>
+                                      updatedIsCompleted(
+                                        task._id,
+                                        task.isCompleted
+                                      )
+                                    }
+                                  />
+                                  {task.isCompleted ? (
+                                    <>
+                                      <button
+                                        className="accordion-button collapsed"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target={dataBsTarget}
+                                        aria-expanded="false"
+                                        aria-controls={collapseId}
+                                      >
+                                        <s>{task.title}</s>
+                                      </button>
+                                    </>
+                                  ) : (
                                     <button
                                       className="accordion-button collapsed"
                                       type="button"
@@ -612,84 +625,73 @@ const TodoUpComing = () => {
                                       aria-expanded="false"
                                       aria-controls={collapseId}
                                     >
-                                      <s>{task.title}</s>
+                                      {task.title}
                                     </button>
-                                  </>
-                                ) : (
-                                  <button
-                                    className="accordion-button collapsed"
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target={dataBsTarget}
-                                    aria-expanded="false"
-                                    aria-controls={collapseId}
-                                  >
-                                    {task.title}
-                                  </button>
-                                )}
-                              </h2>
-                              <div
-                                id={collapseId}
-                                className="accordion-collapse collapse"
-                                data-bs-parent="#accordionFlushExample"
-                              >
-                                <div className="accordion-body">
-                                  <ul className="task__additional">
-                                    <li>
-                                      <i className="fa-solid fa-calendar-days"></i>
-                                      <p>{task.createdAt}</p>
-                                    </li>
-                                    <li>
-                                      <p
-                                        style={{
-                                          background: listColor,
-                                          color: "#fff",
-                                          padding: "4px 8px",
-                                          borderRadius: "10px",
-                                          fontSize: "10px",
-                                          fontWeight: "500",
-                                        }}
-                                      >
-                                        {task.type}
-                                      </p>
-                                    </li>
-                                    <li>
-                                      <p
-                                        style={{
-                                          background: listColor,
-                                          color: "#fff",
-                                          padding: "4px 8px",
-                                          borderRadius: "10px",
-                                          fontSize: "10px",
-                                          fontWeight: "500",
-                                        }}
-                                      >
-                                        {task.list.title}
-                                      </p>
-                                    </li>
-                                    {loading ? (
-                                      <p>Deleting....</p>
-                                    ) : (
-                                      <li
-                                        className="deleteTodo"
-                                        onClick={() => {
-                                          handleDelete(task._id);
-                                        }}
-                                      >
-                                        <i className="fa-solid fa-trash"></i>
+                                  )}
+                                </h2>
+                                <div
+                                  id={collapseId}
+                                  className="accordion-collapse collapse"
+                                  data-bs-parent="#accordionFlushExample"
+                                >
+                                  <div className="accordion-body">
+                                    <ul className="task__additional">
+                                      <li>
+                                        <i className="fa-solid fa-calendar-days"></i>
+                                        <p>{task.createdAt}</p>
                                       </li>
-                                    )}
-                                  </ul>
+                                      <li>
+                                        <p
+                                          style={{
+                                            background: listColor,
+                                            color: "#fff",
+                                            padding: "4px 8px",
+                                            borderRadius: "10px",
+                                            fontSize: "10px",
+                                            fontWeight: "500",
+                                          }}
+                                        >
+                                          {task.type}
+                                        </p>
+                                      </li>
+                                      <li>
+                                        <p
+                                          style={{
+                                            background: listColor,
+                                            color: "#fff",
+                                            padding: "4px 8px",
+                                            borderRadius: "10px",
+                                            fontSize: "10px",
+                                            fontWeight: "500",
+                                          }}
+                                        >
+                                          {task.list.title}
+                                        </p>
+                                      </li>
+                                      {loading ? (
+                                        <p>Deleting....</p>
+                                      ) : (
+                                        <li
+                                          className="deleteTodo"
+                                          onClick={() => {
+                                            handleDelete(task._id);
+                                          }}
+                                        >
+                                          <i className="fa-solid fa-trash"></i>
+                                        </li>
+                                      )}
+                                    </ul>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <p className="no__todo">No Todo, Please add one.</p>
-                  )}
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="no__todo">No Todo, Please add one.</p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

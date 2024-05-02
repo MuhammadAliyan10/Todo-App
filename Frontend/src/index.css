@@ -1,0 +1,188 @@
+@media (max-width: 575.98px) {
+  .auth__box {
+    width: 336px;
+    height: auto;
+    padding: 1rem 20px;
+  }
+  .submit__btn {
+    width: 140px;
+  }
+  .sidebar {
+    position: fixed;
+    top: 15px;
+    left: 6px;
+    height: 96%;
+    width: 160px;
+  }
+  .sidebar__header {
+    margin: 10px 0px 0px 9px;
+
+    font-size: 12px;
+  }
+  .sidebar ul li a {
+    padding: 10px 7px;
+  }
+  .profile-contact {
+    position: fixed;
+    bottom: 2px;
+    left: 2px;
+    width: 133px;
+    padding-bottom: 4px;
+  }
+  .sidebar ul li {
+    margin: 5px 18px;
+  }
+  .sidebar ul li a p {
+    font-size: 11px;
+  }
+  .close {
+    transform: translateX(-103%);
+  }
+  .container {
+    padding-left: 1rem;
+  }
+  .todoToday h3 {
+    margin: 7px 0px 0px 14px;
+    font-size: 19px;
+  }
+  .no__todo {
+    margin: 17px 0px 9px 8px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .task__todo .box {
+    width: 317px;
+    height: auto;
+    padding: 10px 12px;
+    background-color: white;
+    position: absolute;
+    top: 178px;
+  }
+  .box h4 {
+    text-align: center;
+    margin: 1rem 0rem;
+    font-size: 19px;
+  }
+  .box__buttons button {
+    padding: 3px 15px;
+  }
+  .box input,
+  #mySelect {
+    padding: 8px 10px;
+
+    height: 35px;
+
+    font-size: 13px;
+  }
+  .box__list {
+    width: 193px;
+    height: 150px;
+    padding: 3px 7px;
+    top: -10px;
+    left: 15px;
+  }
+  .box__list h4 {
+    margin: 12px 0rem;
+
+    font-size: 14px;
+  }
+  .box__list input {
+    width: 100%;
+    padding: 4px 5px;
+    height: 26px;
+
+    font-size: 13px;
+  }
+  .color__input p {
+    font-size: 12px;
+
+    margin: 2px 14px 0px 10px;
+  }
+  .box__list .box__buttons button {
+    padding: 1px 10px;
+
+    font-size: 11px;
+  }
+  .accordion-body {
+    padding: 20px 6px;
+  }
+  .task__additional li {
+    padding: 0rem 8px;
+  }
+  .task__additional li p {
+    font-size: 12px;
+  }
+  .task__additional {
+    justify-content: space-between;
+  }
+  .todo {
+    margin: 6rem 0rem;
+  }
+  .top__header h3 {
+    margin-top: 4rem;
+  }
+  .top__header h4 {
+    margin-top: 1.5rem;
+  }
+  .left_info {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+  .middle_image img {
+    width: 100%;
+    height: 42vh;
+  }
+  .middle__header h3 {
+    font-size: 30px;
+    line-height: 38px;
+  }
+  .tomorrow__tasks {
+    margin-bottom: 2rem;
+  }
+}
+@media (min-width: 580px) and (max-width: 767.98px) {
+}
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .profile-contact {
+    left: 6px;
+    width: 206px;
+  }
+  .box__list {
+    top: -100px;
+  }
+  .container {
+    padding-left: 4rem;
+  }
+  .left_info {
+    margin-top: 5rem;
+  }
+  .todo {
+    margin-top: 5rem;
+  }
+  .tomorrow__tasks .task__additional {
+    justify-content: space-between;
+  }
+  .weekly__tasks .task__additional {
+    justify-content: space-between;
+  }
+  .weekly__tasks .task__additional li p {
+    font-size: 9px !important;
+  }
+  .weekly__tasks .task__additional li {
+    padding: 0px 8px;
+  }
+  .tomorrow__tasks .task__additional li p {
+    font-size: 9px !important;
+  }
+  .tomorrow__tasks .task__additional li {
+    padding: 0px 8px;
+  }
+  .task__additional li i {
+    margin-right: 4px;
+  }
+  .todoUpComming .container {
+    padding-left: 1.5rem;
+  }
+}
+@media (min-width: 992px) and (max-width: 1240px) {
+}

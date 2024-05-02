@@ -173,7 +173,7 @@ const TodoToday = () => {
   };
 
   return (
-    <div className="todo my-5">
+    <div className="todo">
       <ToastContainer />
       <div className="container">
         <div className="todoToday">

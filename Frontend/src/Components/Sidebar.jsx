@@ -10,6 +10,8 @@ const Sidebar = () => {
   const { pathname } = useLocation();
   const { setIsLogIn, allList, setAllLists } = useTodoContext();
   const [list, setList] = useState({ title: "", color: "" });
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [listChanged, setListChanged] = useState(false);
   const [showBox, setShowBox] = useState(false);
   const navigate = useNavigate();
@@ -17,6 +19,27 @@ const Sidebar = () => {
     localStorage.removeItem("token");
     setIsLogIn(false);
     navigate("/login");
+  };
+
+  useEffect(() => {
+    const checkScreenWidth = () => {
+      setIsSmallScreen(window.innerWidth <= 1200);
+    };
+    checkScreenWidth();
+    if (isSmallScreen) {
+      setIsOpen(!isOpen);
+    } else {
+      setIsOpen(false);
+    }
+  }, [isSmallScreen]);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+  const handleClick = () => {
+    if (isSmallScreen) {
+      setIsOpen(!isOpen);
+    }
   };
   useEffect(() => {
     const getAllList = async () => {
@@ -91,12 +114,16 @@ const Sidebar = () => {
   return (
     <div>
       <ToastContainer />
-      <div className="sidebar">
+      <div className={`sidebar ${isOpen ? "close" : ""}`}>
         <h4 className="sidebar__header">Tasks</h4>
 
         <ul>
           <li>
-            <Link to="/" className={pathname == "/" ? "active" : ""}>
+            <Link
+              to="/"
+              className={pathname == "/" ? "active" : ""}
+              onClick={handleClick}
+            >
               <i className="fa-solid fa-house"></i>
               <p>Home</p>
             </Link>
@@ -105,6 +132,7 @@ const Sidebar = () => {
             <Link
               to="/todoToday"
               className={pathname == "/todoToday" ? "active" : ""}
+              onClick={handleClick}
             >
               <i className="fa-solid fa-list-check"></i>
               <p>Today</p>
@@ -112,6 +140,7 @@ const Sidebar = () => {
           </li>
           <li>
             <Link
+              onClick={handleClick}
               to="/todoUpComing"
               className={pathname == "/todoUpComing" ? "active" : ""}
             >
@@ -202,6 +231,15 @@ const Sidebar = () => {
               </a>
             </li>
           </ul>
+        </div>
+        <div className="toggleBtn">
+          <button onClick={toggleSidebar}>
+            {isOpen ? (
+              <i className="fa-solid fa-door-open"></i>
+            ) : (
+              <i className="fa-solid fa-door-closed"></i>
+            )}
+          </button>
         </div>
       </div>
     </div>

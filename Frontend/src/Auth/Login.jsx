@@ -48,6 +48,7 @@ const Login = () => {
               placeholder="Enter your email"
               name="email"
               onChange={onChangeHandler}
+              autoComplete="off"
             />
             <input
               type="password"

@@ -1,190 +1,184 @@
 .create__todo {
-    background-color: rgba(250, 250, 250, 0);
-    border: 1px solid rgb(235, 235, 235);
-    border-radius: 10px;
-    padding: 10px;
-    width: 100%;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    color: #7C7C7C;
+  background-color: rgba(250, 250, 250, 0);
+  border: 1px solid rgb(235, 235, 235);
+  border-radius: 10px;
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  color: #7c7c7c;
 }
-
+.todo {
+  margin: 5rem 0rem;
+}
 .no__todo {
-    margin: 20px 0px 10px 30px;
-    font-size: 18px;
-    font-weight: 500;
+  margin: 20px 0px 10px 30px;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .task__todo {
-    padding: 10px 20px;
+  padding: 10px 20px;
 }
 
 .create__todo i {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .today__task {
-    border: 1px solid rgb(235, 235, 235);
-    width: 100%;
-    height: 55vh;
-    border-radius: 10px;
-    overflow-y: scroll;
-
-
+  border: 1px solid rgb(235, 235, 235);
+  width: 100%;
+  height: 55vh;
+  border-radius: 10px;
+  overflow-y: scroll;
 }
 
 .today__task::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .create__list {
-    background-color: rgba(250, 250, 250, 0);
-    border: 1px solid rgb(235, 235, 235);
-    border-radius: 10px;
-    padding: 10px;
-    margin: 0px 10px;
-    font-size: 14px;
-    width: 100%;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    color: #7C7C7C;
+  background-color: rgba(250, 250, 250, 0);
+  border: 1px solid rgb(235, 235, 235);
+  border-radius: 10px;
+  padding: 10px;
+  margin: 0px 10px;
+  font-size: 14px;
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  color: #7c7c7c;
 }
 
 .create__list i {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
-
 .today__task h3 {
-    margin: 13px 0px 0px 20px;
+  margin: 13px 0px 0px 20px;
 }
 
 .todoToday {
-    border: 1px solid rgb(235, 235, 235);
-    width: 100%;
-    border-radius: 10px;
-    padding: 1rem 0rem;
-
+  border: 1px solid rgb(235, 235, 235);
+  width: 100%;
+  border-radius: 10px;
+  padding: 1rem 0rem;
 }
 
 .todoToday h3 {
-    margin: 13px 0px 0px 20px;
+  margin: 13px 0px 0px 20px;
 }
 
 .accordion {
-    --bs-accordion-bg: transparent;
-    border-bottom: 1px solid rgb(235, 235, 235);
-
-
+  --bs-accordion-bg: transparent;
+  border-bottom: 1px solid rgb(235, 235, 235);
 }
 
 .accordion-button:focus {
-    background-color: transparent;
-    outline: none !important;
-    box-shadow: none !important;
+  background-color: transparent;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .accordion-header {
-    color: #444444ff;
-    display: flex;
-    justify-content: start;
-    align-items: center;
+  color: #444444ff;
+  display: flex;
+  justify-content: start;
+  align-items: center;
 }
 
 .accordion-header h2 {
-    margin: 0;
+  margin: 0;
 }
 
 .accordion-button:not(.collapsed) {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .form-check-input:checked {
-    border: 1px solid;
-    outline: none;
-    box-shadow: none !important;
-    background-color: #000;
-    border-radius: 10px;
-    border-color: rgb(235, 235, 235) !important;
+  border: 1px solid;
+  outline: none;
+  box-shadow: none !important;
+  background-color: #000;
+  border-radius: 10px;
+  border-color: rgb(235, 235, 235) !important;
 }
 
 .form-check-input {
-    border: 1px solid;
-    border-color: rgb(235, 235, 235) !important;
-    outline: none;
-    width: 20px;
-    height: 20px;
-    margin: 0;
-    box-shadow: none !important;
+  border: 1px solid;
+  border-color: rgb(235, 235, 235) !important;
+  outline: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  box-shadow: none !important;
 }
 
 .task__additional {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    margin: 0;
-    padding: 0;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin: 0;
+  padding: 0;
 }
 
 .task__additional li p {
-    margin: 0;
+  margin: 0;
 }
 
 .deleteTodo i {
-    color: red;
-    cursor: pointer;
+  color: red;
+  cursor: pointer;
 }
 
 .task__additional li {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    border-right: 1px solid #000;
-    padding: 0rem 1rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  border-right: 1px solid #000;
+  padding: 0rem 1rem;
 
-    &:last-of-type {
-        border-right: none !important;
-    }
+  &:last-of-type {
+    border-right: none !important;
+  }
 }
 
 .task__additional li i {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .tomorrow__tasks {
-    border: 1px solid rgb(235, 235, 235);
-    width: 100%;
-    height: 55vh;
-    border-radius: 10px;
-    overflow-y: scroll;
-
+  border: 1px solid rgb(235, 235, 235);
+  width: 100%;
+  height: 55vh;
+  border-radius: 10px;
+  overflow-y: scroll;
 }
 
 .tomorrow__tasks::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .tomorrow__tasks h3 {
-    margin: 13px 0px 0px 20px;
-    font-size: 24px;
+  margin: 13px 0px 0px 20px;
+  font-size: 24px;
 }
 
 .weekly__tasks {
-    border: 1px solid rgb(235, 235, 235);
-    width: 100%;
-    height: 55vh;
-    border-radius: 10px;
-    overflow-y: scroll;
-
+  border: 1px solid rgb(235, 235, 235);
+  width: 100%;
+  height: 55vh;
+  border-radius: 10px;
+  overflow-y: scroll;
 }
 
 .weekly__tasks::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .weekly__tasks h3 {
-    margin: 13px 0px 0px 20px;
-    font-size: 24px;
+  margin: 13px 0px 0px 20px;
+  font-size: 24px;
 }

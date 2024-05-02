@@ -53,12 +53,14 @@ const Signup = () => {
               placeholder="Enter your username"
               name="username"
               onChange={(e) => handleChange(e)}
+              autoComplete="off"
             />
             <input
               type="email"
               placeholder="Enter your email"
               name="email"
               onChange={(e) => handleChange(e)}
+              autoComplete="off"
             />
             <input
               type="password"

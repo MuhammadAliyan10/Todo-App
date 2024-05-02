@@ -26,7 +26,7 @@ const Home = () => {
 
   return (
     <div className="Home">
-      <div className="container__fluid">
+      <div className="container">
         <div className="top__header">
           <h3>Home</h3>
           <h4>
@@ -35,7 +35,7 @@ const Home = () => {
         </div>
         <div className="middle__header">
           <div className="row">
-            <div className="col-sm-6">
+            <div className="col-sm-12 col-md-6 col-lg-6">
               <div className="left_info">
                 <h3>
                   Task
@@ -47,7 +47,7 @@ const Home = () => {
                 </p>
               </div>
             </div>
-            <div className="col-sm-6">
+            <div className="col-sm-12 col-md-6 col-lg-6">
               <div className="middle_image">
                 <img src={HomeImage} alt="" />
               </div>
