@@ -93,6 +93,9 @@ router.post("/addTodo", Auth, async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found");
     }
+    if (!timeStamps) {
+      return res.status(404).json({ message: "Time stamps not found." });
+    }
     const newTodo = {
       title,
       list,

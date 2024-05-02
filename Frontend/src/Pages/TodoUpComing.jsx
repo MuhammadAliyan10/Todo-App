@@ -87,9 +87,7 @@ const TodoUpComing = () => {
       color: "",
     },
 
-    type: {
-      value: "",
-    },
+    type: "",
     timeStamps: "",
   });
 
@@ -142,9 +140,7 @@ const TodoUpComing = () => {
         color: "",
       },
 
-      type: {
-        value: "",
-      },
+      type: "",
       timeStamps: "",
     });
   };
@@ -157,8 +153,9 @@ const TodoUpComing = () => {
       return toast("Type is required.");
     } else if (!data.list.title) {
       return toast("List title is required.");
+    } else if (!data.timeStamps) {
+      return toast("TimeStamps is required.");
     }
-
     try {
       const token = localStorage.getItem("token");
       const response = await fetch("http://localhost:3000/tasks/addTodo", {
@@ -169,11 +166,10 @@ const TodoUpComing = () => {
         },
         body: JSON.stringify(data),
       });
-      const resData = await response.json();
+
       if (!response.ok) {
-        return toast(resData.message);
+        return toast("Failed to add todo");
       }
-      toast(resData.message);
       setShowBox(false);
       isTodoAdded(true);
       setData({
@@ -183,9 +179,7 @@ const TodoUpComing = () => {
           color: "",
         },
 
-        type: {
-          value: "",
-        },
+        type: "",
         timeStamps: "",
       });
     } catch (error) {
@@ -208,7 +202,7 @@ const TodoUpComing = () => {
 
       const data = await res.json();
       if (res.ok) {
-        isTodoAdded(!todoAdded);
+        isTodoAdded(true);
         setTodoToday((prevTodo) =>
           prevTodo.map((todoItem) => {
             if (todoItem._id === taskID) {
@@ -225,8 +219,8 @@ const TodoUpComing = () => {
 
   return (
     <div className="todoUpComming">
+      <ToastContainer />
       <div className="todo my-5">
-        <ToastContainer />
         <div className="container">
           <div className="today__task">
             <h3>Today</h3>
@@ -258,17 +252,15 @@ const TodoUpComing = () => {
                         <>
                           {allList.map((list) => {
                             return (
-                              <>
-                                <option hidden>Select the list...</option>
-                                <option
-                                  value={JSON.stringify({
-                                    title: list.title,
-                                    color: list.color,
-                                  })}
-                                >
-                                  {list.title}
-                                </option>
-                              </>
+                              <option
+                                key={list._id}
+                                value={JSON.stringify({
+                                  title: list.title,
+                                  color: list.color,
+                                })}
+                              >
+                                {list.title}
+                              </option>
                             );
                           })}
                         </>

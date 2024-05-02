@@ -232,15 +232,17 @@ const Sidebar = () => {
             </li>
           </ul>
         </div>
-        <div className="toggleBtn">
-          <button onClick={toggleSidebar}>
-            {isOpen ? (
-              <i className="fa-solid fa-door-open"></i>
-            ) : (
-              <i className="fa-solid fa-door-closed"></i>
-            )}
-          </button>
-        </div>
+        {isSmallScreen && (
+          <div className="toggleBtn">
+            <button onClick={toggleSidebar}>
+              {isOpen ? (
+                <i className="fa-solid fa-door-open"></i>
+              ) : (
+                <i className="fa-solid fa-door-closed"></i>
+              )}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

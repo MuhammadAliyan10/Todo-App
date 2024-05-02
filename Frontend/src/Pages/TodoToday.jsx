@@ -50,9 +50,7 @@ const TodoToday = () => {
       color: "",
     },
 
-    type: {
-      value: "",
-    },
+    type: "",
     timeStamps: "",
   });
 
@@ -152,7 +150,8 @@ const TodoToday = () => {
       if (!response.ok) {
         return toast("Failed to add todo");
       }
-      toast(response.message);
+      const dataRes = await response.json();
+      toast(dataRes.message);
       setShowBox(false);
       isTodoAdded(true);
       setData({
@@ -162,9 +161,7 @@ const TodoToday = () => {
           color: "",
         },
 
-        type: {
-          value: "",
-        },
+        type: "",
         timeStamps: "",
       });
     } catch (error) {
@@ -203,17 +200,15 @@ const TodoToday = () => {
                       <>
                         {allList.map((list) => {
                           return (
-                            <>
-                              <option hidden>Select the list...</option>
-                              <option
-                                value={JSON.stringify({
-                                  title: list.title,
-                                  color: list.color,
-                                })}
-                              >
-                                {list.title}
-                              </option>
-                            </>
+                            <option
+                              key={list._id}
+                              value={JSON.stringify({
+                                title: list.title,
+                                color: list.color,
+                              })}
+                            >
+                              {list.title}
+                            </option>
                           );
                         })}
                       </>
