@@ -219,12 +219,6 @@ const Sidebar = () => {
 
           <ul>
             <li>
-              <Link to="/contact">
-                <i className="fa-solid fa-address-book"></i>
-                <p>Contact</p>
-              </Link>
-            </li>
-            <li>
               <a href="" onClick={handleSignOut}>
                 <i className="fa-solid fa-right-from-bracket"></i>
                 <p>Sign out</p>

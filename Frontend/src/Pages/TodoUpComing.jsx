@@ -29,15 +29,18 @@ const TodoUpComing = () => {
           },
         });
         const todo = await data.json();
-        if (!data.ok) {
-          return toast(todo.message);
-        }
+
         setTodoToday(todo);
         isTodoAdded(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
+
+    getTodayTodo();
+  }, [todoAdded]);
+
+  useEffect(() => {
     const getTomorrowTodo = async () => {
       try {
         const api = "http://localhost:3000/tasks/tomorrowTodo";
@@ -48,15 +51,15 @@ const TodoUpComing = () => {
           },
         });
         const todo = await data.json();
-        if (!data.ok) {
-          return toast(todo.message);
-        }
         setTodoTomorrow(todo);
-        isTodoAdded(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
+
+    getTomorrowTodo();
+  }, [todoTomorrow]);
+  useEffect(() => {
     const getNextWeekTodo = async () => {
       try {
         const api = "http://localhost:3000/tasks/nextWeekTodo";
@@ -67,18 +70,14 @@ const TodoUpComing = () => {
           },
         });
         const todo = await data.json();
-        if (!data.ok) {
-          return toast(todo.message);
-        }
         setTodoNextWeek(todo);
         isTodoAdded(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
+
     getNextWeekTodo();
-    getTomorrowTodo();
-    getTodayTodo();
   }, [todoAdded]);
   const [data, setData] = useState({
     title: "",
@@ -170,6 +169,7 @@ const TodoUpComing = () => {
       if (!response.ok) {
         return toast("Failed to add todo");
       }
+      toast("Todo added successfully");
       setShowBox(false);
       isTodoAdded(true);
       setData({

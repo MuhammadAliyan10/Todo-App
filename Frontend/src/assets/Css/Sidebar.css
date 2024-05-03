@@ -144,3 +144,6 @@
   border: 1px solid transparent;
   border-radius: 0px 4px 4px 0px;
 }
+.profile-contact ul li a {
+  width: 192px;
+}

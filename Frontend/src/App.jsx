@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home";
 import TodoToday from "./Pages/TodoToday";
 import TodoUpComing from "./Pages/TodoUpComing";
-import Contact from "./Pages/Contact";
 import Login from "./Auth/Login";
 import Signup from "./Auth/Signup";
 import { useTodoContext } from "./Context/TodoContext";
@@ -31,7 +30,6 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/todoToday" element={<TodoToday />} />
             <Route path="/todoUpcoming" element={<TodoUpComing />} />
-            <Route path="/contact" element={<Contact />} />
           </>
         )}
       </Routes>
