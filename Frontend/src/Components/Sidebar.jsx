@@ -202,7 +202,7 @@ const Sidebar = () => {
                     onChange={(e) => onInputChange(e)}
                   />
                 </div>
-                <div className="box__buttons">
+                <div className="box__buttons" style={{ float: "right" }}>
                   <button onClick={handleListAdd}>Add</button>
                   <button onClick={() => setShowBox(false)}>Close</button>
                 </div>

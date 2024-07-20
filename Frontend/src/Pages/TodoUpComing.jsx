@@ -227,91 +227,117 @@ const TodoUpComing = () => {
             <div className="task__todo mt-3">
               <button
                 className="create__todo"
-                onClick={() => showBoxHandler("Today")}
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+                onClick={() => showBoxHandler("today")}
               >
                 <i className="fa-solid fa-plus"></i> Add New Task
               </button>
-              <div className="background2">
-                {showBox && (
-                  <div className="box">
-                    <h4>Add Task</h4>
-                    <input
-                      value={data.title}
-                      type="text"
-                      name="title"
-                      placeholder="Enter the title..."
-                      onChange={(e) => onInputChange(e)}
-                    />
-                    <select
-                      id="mySelect"
-                      value={data.list.value}
-                      onChange={(e) => onInputChange(e)}
-                      name="list_value"
-                    >
-                      {allList.length > 0 ? (
-                        <>
-                          {allList.map((list) => {
-                            return (
-                              <option
-                                key={list._id}
-                                value={JSON.stringify({
-                                  title: list.title,
-                                  color: list.color,
-                                })}
-                              >
-                                {list.title}
-                              </option>
-                            );
-                          })}
-                        </>
-                      ) : (
-                        <option hidden>No list found</option>
-                      )}
-                    </select>
-                    <select
-                      id="mySelect"
-                      value={data.type.value}
-                      onChange={(e) => onInputChange(e)}
-                      name="type"
-                    >
-                      <option hidden>Enter the type...</option>
-                      <option value="Todo">Todo</option>
-                      <option value="Reminder">Reminder</option>
-                      <option value="Desire">Desire</option>
-                    </select>
+              <div
+                class="modal fade"
+                id="exampleModal"
+                tabindex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        Add Task
+                      </h1>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body">
+                      <div className="box">
+                        <input
+                          value={data.title}
+                          type="text"
+                          name="title"
+                          placeholder="Enter the title..."
+                          onChange={(e) => onInputChange(e)}
+                        />
+                        <select
+                          id="mySelect"
+                          value={data.list.value}
+                          onChange={(e) => onInputChange(e)}
+                          name="list_value"
+                        >
+                          {allList.length > 0 ? (
+                            <>
+                              {allList.map((list) => {
+                                return (
+                                  <option
+                                    key={list._id}
+                                    value={JSON.stringify({
+                                      title: list.title,
+                                      color: list.color,
+                                    })}
+                                  >
+                                    {list.title}
+                                  </option>
+                                );
+                              })}
+                            </>
+                          ) : (
+                            <option hidden>No list found</option>
+                          )}
+                        </select>
+                        <select
+                          id="mySelect"
+                          value={data.type.value}
+                          onChange={(e) => onInputChange(e)}
+                          name="type"
+                        >
+                          <option hidden>Enter the type...</option>
+                          <option value="Todo">Todo</option>
+                          <option value="Reminder">Reminder</option>
+                          <option value="Desire">Desire</option>
+                        </select>
 
-                    <select
-                      id="mySelect"
-                      value={data.timeStamps}
-                      onChange={(e) => onInputChange(e)}
-                      name="timeStamps"
-                    >
-                      <option hidden>Enter the time.</option>
-                      <option
-                        value="Today"
-                        disabled={time == "Tomorrow" || time == "nextWeek"}
-                      >
-                        Today
-                      </option>
-                      <option
-                        value="Tomorrow"
-                        disabled={time == "Today" || time == "nextWeek"}
-                      >
-                        Tomorrow
-                      </option>
-                      <option
-                        value="nextWeek"
-                        disabled={time == "Today" || time == "Tomorrow"}
-                      >
-                        Next Week
-                      </option>
-                    </select>
-                    <div className="box__buttons">
-                      <button onClick={handleAddTodo}>Add</button>
-                      <button onClick={() => setShowBox(false)}>Close</button>
+                        <select
+                          id="mySelect"
+                          value={data.timeStamps}
+                          onChange={(e) => onInputChange(e)}
+                          name="timeStamps"
+                        >
+                          <option hidden>Enter the time.</option>
+                          <option
+                            value="Today"
+                            disabled={time == "Tomorrow" || time == "nextWeek"}
+                          >
+                            Today
+                          </option>
+                          <option
+                            value="Tomorrow"
+                            disabled={time == "Today" || time == "nextWeek"}
+                          >
+                            Tomorrow
+                          </option>
+                          <option
+                            value="nextWeek"
+                            disabled={time == "Today" || time == "Tomorrow"}
+                          >
+                            Next Week
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <div className="box__buttons">
+                        <button onClick={handleAddTodo}>Add</button>
+                        <button type="button" data-bs-dismiss="modal">
+                          Close
+                        </button>
+                      </div>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
               {todoToday.length > 0 ? (
                 <div className="my__tasks">
@@ -435,6 +461,8 @@ const TodoUpComing = () => {
                   <div className="task__todo mt-3">
                     <button
                       className="create__todo"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleModal"
                       onClick={() => showBoxHandler("Tomorrow")}
                     >
                       <i className="fa-solid fa-plus"></i> Add New Task
@@ -563,6 +591,8 @@ const TodoUpComing = () => {
                   <div className="task__todo mt-3">
                     <button
                       className="create__todo"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleModal"
                       onClick={() => showBoxHandler("nextWeek")}
                     >
                       <i className="fa-solid fa-plus"></i> Add New Task

@@ -12,20 +12,20 @@ body {
   position: relative;
 }
 
-.task__todo .box {
+/* .task__todo .box {
   width: 400px;
   height: auto;
   padding: 10px 20px;
   background-color: white;
   position: absolute;
-  top: 350px;
-  left: 55%;
+  top: 150px;
+  left: 45%;
   transform: translate(-50%, -50%);
   z-index: 1000;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 
   border-radius: 8px;
-}
+} */
 
 .box h4 {
   text-align: center;
@@ -42,13 +42,6 @@ body {
   box-shadow: none !important;
   font-size: 14px;
   border: 1px solid rgb(235, 235, 235);
-}
-
-.box__buttons {
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  margin-top: 1rem;
 }
 
 .box__buttons button {
